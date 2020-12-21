@@ -130,3 +130,12 @@ dmypy.json
 
 # PyCharm IDE
 .idea/
+
+# Database
+*.db
+
+# Directory config file
+.directory
+
+# Application config file
+config.py
