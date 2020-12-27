@@ -1,5 +1,5 @@
 from flask import flash, redirect, render_template, url_for
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, login_required, logout_user
 
 from webapp import app, login_manager
 from webapp.forms import LoginForm
@@ -49,3 +49,14 @@ def process_login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+@app.route('/admin')
+@login_required
+def admin_index():
+    if current_user.is_admin:
+        username = current_user.name
+        title = f"Welcome {current_user.role} {username}!"
+        return render_template('admin.html', title=title)
+    else:
+        return redirect(url_for('index'))
