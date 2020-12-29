@@ -1,6 +1,10 @@
 from flask import Flask
 from flask_login import LoginManager
-from webapp.models import db
+from webapp.db import db
+from webapp.admin.views import bp as admin_bp
+from webapp.main.views import bp as main_bp
+from webapp.user.models import User
+from webapp.user.views import bp as user_bp
 
 
 def create_app():
@@ -10,12 +14,17 @@ def create_app():
 
     login_manager = LoginManager()
     login_manager.init_app(app)
-    login_manager.login_view = 'login'
+    login_manager.login_view = 'user.login'
 
-    return app, login_manager
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(user_id)
+
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(main_bp)
+    app.register_blueprint(user_bp)
+
+    return app
 
 
-app, login_manager = create_app()
-
-
-from webapp import views
+app = create_app()
