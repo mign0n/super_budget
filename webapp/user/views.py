@@ -15,7 +15,7 @@ def login():
     title = "Authorization"
     header = "Welcome to the Super Budget!"
     login_form = LoginForm()
-    return render_template('login.html', title=title, header=header,
+    return render_template('user/login.html', title=title, header=header,
                            form=login_form,
                            )
 

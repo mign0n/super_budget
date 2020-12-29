@@ -11,6 +11,6 @@ def admin_index():
     if current_user.is_admin:
         username = current_user.name
         title = f"Welcome {current_user.role} {username}!"
-        return render_template('admin.html', title=title)
+        return render_template('admin/admin.html', title=title)
     else:
         return redirect(url_for('index'))

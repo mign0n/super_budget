@@ -11,4 +11,4 @@ def index():
         return redirect(url_for('user.login'))
     username = current_user.name
     title = f"Welcome {username}!"
-    return render_template('index.html', title=title)
+    return render_template('main/index.html', title=title)
