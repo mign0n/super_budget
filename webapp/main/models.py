@@ -1,23 +1,11 @@
-from flask_sqlalchemy import SQLAlchemy
-
-
-db = SQLAlchemy()
-
-
-class User(db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(50), unique=True)
-    password_hash = db.Column(db.String(255), nullable=False, unique=True)
-
-    def __repr__(self):
-        return f"<User: name = {self.name}, id = {self.id}>"
+from webapp.user.models import User
+from webapp.db import db
 
 
 class Category(db.Model):
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
     name = db.Column(db.String(50), nullable=False, unique=True)
     is_income = db.Column(db.Boolean, nullable=False)
 
