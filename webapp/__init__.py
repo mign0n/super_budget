@@ -1,9 +1,11 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_migrate import Migrate
 from webapp.db import db
 from webapp.admin.views import bp as admin_bp
 from webapp.main.views import bp as main_bp
 from webapp.user.models import User
+from webapp.main.models import Category, Transaction
 from webapp.user.views import bp as user_bp
 
 
@@ -11,6 +13,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     login_manager = LoginManager()
     login_manager.init_app(app)
