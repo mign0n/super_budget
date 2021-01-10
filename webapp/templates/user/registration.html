@@ -1,10 +1,12 @@
+<!-- Заготовка. Пока что регистрацию на сайте не проходили, задача отложена. -->
+
+<!--
 {% extends "base.html" %}
 {% block content %}
 
   <div class="container">
     <h1>{{ header }}</h1>
-    <h4>Log-in please</h4><br>
-    <div class='col-5'>
+    <h4>Register please</h4>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <div class="alert alert-warning" role="alert">
@@ -17,23 +19,21 @@
     <form action="{{ url_for('user.process_login') }}" method="post">
       {{ form.hidden_tag() }}
       <div class="form-group">
-        {{ form.username.label }}
+        {{ form.username.label }}<br>
         {{ form.username() }}
       </div>
       <div class="form-group">
-        {{ form.password.label }}
+        {{ form.email.label }}<br>
+        {{ form.email() }}
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
+      <div class="form-group">
+        {{ form.password.label }}<br>
         {{ form.password() }}
       </div>
-      <div class="form-group form-check">
-        {{ form.remember_me() }}
-        {{ form.remember_me.label(class_='form-check-label') }}
-      </div>
       {{ form.submit }}
-      <!-- к кнопкам добавить ссылки на соотв страницы-->
-      <a class="btn btn-primary" href="#" role="button">Registration</a>
-      <a class="btn btn-primary" href="#" role="button">Forgot Password</a>
     </form>
-  </div>
   </div>
 
 {% endblock %}
+-->
