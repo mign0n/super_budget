@@ -1,11 +1,6 @@
 from flask_wtf import FlaskForm
-<<<<<<< Updated upstream
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired
-=======
 from wtforms import BooleanField, StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
->>>>>>> Stashed changes
 
 from webapp.user.models import User
 
@@ -21,10 +16,6 @@ class LoginForm(FlaskForm):
                                         "placeholder": "Enter password",
                                         "type": "password",
                                         }
-<<<<<<< Updated upstream
-                             )
-    submit = SubmitField('Submit', render_kw={"class": "btn btn-primary"})
-=======
                             )
     submit = SubmitField('Войти', render_kw={"class": "btn btn-primary"})
 
@@ -68,4 +59,3 @@ class RegistrationForm(FlaskForm):
         users_coutn = User.query.filter_by(email=email.data).count()
         if users_coutn > 0:
             raise ValidationError('Пользователь с такой почтой уже зарегистрирован')
->>>>>>> Stashed changes
