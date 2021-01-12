@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+  <div>
+    <b>This will be the main workspace</b>
+  </div>
   <h1>{{ title }}</h1>
   {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -13,7 +16,42 @@
   {% endwith %}
 
   <div>
-    <b>This will be the main workspace</b>
+    <form>
+      <div class="form-row">
+        <div class="col-auto">
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Income/Outcome
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Income</a>
+              <a class="dropdown-item" href="#">Outcome</a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Money">
+        </div>
+        <div class="col-auto">
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Category
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Category 1</a>
+              <a class="dropdown-item" href="#">Category 2</a>
+              <a class="dropdown-item" href="#">Add new category...</a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Date">
+        </div>
+        <div class="col-md-5">
+          <input type="text" class="form-control" placeholder="Comment">
+        </div>
+      </div>
+    </form>
   </div>
 
 {% endblock %}
