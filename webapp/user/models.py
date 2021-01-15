@@ -11,6 +11,9 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(255), nullable=False, unique=True)
     role = db.Column(db.String(5), nullable=False)
 
+    categories = db.relationship('Category', backref='category_owner', lazy='dynamic')
+    transactions = db.relationship('Transaction', backref='transaction_owner', lazy='dynamic')
+
     def __repr__(self):
         return f"<User: name = {self.name}, id = {self.id}>"
 

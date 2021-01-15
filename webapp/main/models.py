@@ -9,6 +9,8 @@ class Category(db.Model):
     name = db.Column(db.String(50), nullable=False, unique=True)
     is_income = db.Column(db.Boolean, nullable=False)
 
+    transactions = db.relationship('Transaction', backref='trans_cat', lazy='dynamic')
+
     def __repr__(self):
         return (
             f"<Category: name = {self.name}, id = {self.id},"
