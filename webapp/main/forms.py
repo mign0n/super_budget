@@ -3,7 +3,7 @@ from wtforms import DateField, SelectField, StringField, SubmitField
 from wtforms.validators import DataRequired
 
 # mock object
-categories = ['Продукты', 'Транспорт', 'Дом', 'Развлечения', 'Прочее', 'Услуги', 'Зарплата']
+CATEGORIES = ['Продукты', 'Транспорт', 'Дом', 'Развлечения', 'Прочее', 'Услуги', 'Зарплата']
 
 
 class TransactionForm(FlaskForm):
@@ -31,7 +31,7 @@ class TransactionForm(FlaskForm):
                                        "aria-expanded": "false"
                                        }
                             )
-    category = SelectField(choices=categories,
+    category = SelectField(choices=CATEGORIES,
                            render_kw={"class": "btn btn-primary dropdown-toggle",
                                       "data-toggle": "dropdown",
                                       "aria-haspopup": "true",
