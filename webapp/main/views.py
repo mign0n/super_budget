@@ -4,6 +4,7 @@ from flask_login import current_user
 from webapp import db
 from webapp.main.models import Category, Transaction
 from webapp.main.forms import TransactionForm
+from webapp.user.forms import CategoryForm
 
 bp = Blueprint('main', __name__, url_prefix=None)
 
@@ -45,3 +46,28 @@ def transaction():
           f"Is income: {is_income}; money: {value}; "
           f"category: {category.name}; date: {date}; {comment}")
     return redirect(url_for('main.index'))
+
+
+@bp.route('/category_adding')
+def category_adding():
+    title = "Add new category"
+    form = CategoryForm()
+    return render_template('main/category_adding.html', title=title, form=form)
+
+
+@bp.route('/category_adding-process', methods=['POST'])
+def category_adding_process():
+    form = CategoryForm()
+    if form.validate_on_submit():
+        new_category = Category(user_id=current_user.id,
+                                name=form.new_category.data,
+                                is_income=bool(int(form.is_income.data)))
+        db.session.add(new_category)
+        db.session.commit()
+        flash('Категория успешно добавлена!')
+        return redirect(url_for('main.index'))
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f'Ошибка в поле {getattr(form, field).label.text}: {error}')
+        return redirect(url_for('main.category_adding'))
