@@ -70,6 +70,8 @@ class CategoryForm(FlaskForm):
     submit = SubmitField('Добавить', render_kw={"class": "btn btn-primary"})
 
     def validate_new_category(self, new_category):
-        category_exist = db.session.query(exists().where(and_(Category.name == new_category.data, Category.user_id == current_user.id))).scalar()
+        category_exist = db.session.query(exists().where(
+            and_(Category.name == new_category.data, Category.user_id == current_user.id)
+        )).scalar()
         if category_exist:
             raise ValidationError('У вас уже есть такая категория!')
