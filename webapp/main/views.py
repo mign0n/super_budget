@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user
+from sqlalchemy import or_
 
 from webapp import db
 from webapp.main.models import Category, Transaction
@@ -9,43 +10,49 @@ from webapp.user.forms import CategoryForm
 bp = Blueprint('main', __name__, url_prefix=None)
 
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 def index():
     if current_user.is_anonymous:
         return redirect(url_for('user.login'))
+
     username = current_user.name
     title = f"Welcome {username}!"
+    available_categories = db.session.query(Category).filter(
+        or_(Category.user_id == current_user.id, Category.user_id.is_(None))
+    ).all()
+    categories_list = [(ac.id, ac.name) for ac in available_categories]
+
     form = TransactionForm()
+    form.category.choices = categories_list
+
+    if form.validate_on_submit():
+        is_income = form.is_income.data
+        category_id = form.category.data
+        category = Category.query.filter_by(id=category_id, is_income=is_income).first()
+
+        # mock object
+        is_actual = True
+        value = form.value.data
+        date = form.date.data
+        comment = form.comment.data
+        new_transaction = Transaction(is_actual=is_actual,
+                                      value=value,
+                                      date=date,
+                                      comment=comment,
+                                      trans_cat=category,
+                                      transaction_owner=current_user)
+
+        db.session.add(new_transaction)
+        db.session.commit()
+
+        flash(f"Data has been written successfully. "
+              f"Is income: {is_income}; money: {value}; "
+              f"category: {category.name}; date: {date}; {comment}")
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f'Ошибка в поле {getattr(form, field).label.text}: {error}')
     return render_template('main/index.html', title=title, form=form)
-
-
-@bp.route('/transaction', methods=['POST'])
-def transaction():
-    form = TransactionForm()
-
-    is_income = form.is_income.data
-    category_name = form.category.data
-    category = Category.query.filter_by(name=category_name, is_income=is_income).first()
-
-    # mock object
-    is_actual = True
-    value = form.value.data
-    date = form.date.data
-    comment = form.comment.data
-    new_transaction = Transaction(is_actual=is_actual,
-                                  value=value,
-                                  date=date,
-                                  comment=comment,
-                                  trans_cat=category,
-                                  transaction_owner=current_user)
-
-    db.session.add(new_transaction)
-    db.session.commit()
-
-    flash(f"Data has been written successfully. "
-          f"Is income: {is_income}; money: {value}; "
-          f"category: {category.name}; date: {date}; {comment}")
-    return redirect(url_for('main.index'))
 
 
 @bp.route('/category_adding')
