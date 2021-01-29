@@ -16,7 +16,8 @@ def index():
     username = current_user.name
     title = f"Welcome {username}!"
     form = TransactionForm()
-    return render_template('main/index.html', title=title, form=form)
+    user_transactions = Transaction.query.filter(Transaction.user_id == current_user.id).order_by(Transaction.date.desc()).limit(10)
+    return render_template('main/index.html', title=title, form=form, user_transactions=user_transactions)
 
 
 @bp.route('/transaction', methods=['POST'])
@@ -29,7 +30,10 @@ def transaction():
 
     # mock object
     is_actual = True
-    value = form.value.data
+    if not bool(int(form.is_income.data))
+        value = int(form.value.data) * (-1)
+    else:
+        value = form.value.data
     date = form.date.data
     comment = form.comment.data
     new_transaction = Transaction(is_actual=is_actual,
@@ -42,9 +46,7 @@ def transaction():
     db.session.add(new_transaction)
     db.session.commit()
 
-    flash(f"Data has been written successfully. "
-          f"Is income: {is_income}; money: {value}; "
-          f"category: {category.name}; date: {date}; {comment}")
+    flash(f"Data has been written successfully.")
     return redirect(url_for('main.index'))
 
 
