@@ -24,7 +24,7 @@ class Transaction(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
     category_id = db.Column(db.Integer, db.ForeignKey(Category.id))
     is_actual = db.Column(db.Boolean, nullable=False)
-    value = db.Column(db.DECIMAL, nullable=False)
+    value = db.Column(db.DECIMAL(15,2), nullable=False)
     date = db.Column(db.Date, nullable=False)
     comment = db.Column(db.String(255), nullable=False)
 

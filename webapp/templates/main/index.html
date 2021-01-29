@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-  <div>
-    <b>This will be the main workspace</b>
-  </div>
-  <h1>{{ title }}</h1>
   {% with messages = get_flashed_messages() %}
     {% if messages %}
       <div class="alert alert-warning" role="alert">
@@ -42,6 +38,32 @@
         </div>
       </div>
     </form>
-  </div>
+  </div><br/>
+   <div class="row">
+     <div class="col-8">
+      <div class='container'>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Category</th>
+              <th scope="col">Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for transaction in user_transactions %}
+            <tr>
+              <td>{{ transaction.date }}</td>
+              <td>{{ transaction.value }}</td>
+              <td>{{ transaction.trans_cat.name }}</td>
+              <td>{{ transaction.comment }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+     </div>
+   </div> 
 
 {% endblock %}
