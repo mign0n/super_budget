@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
-from flask_login import current_user
+from flask_login import current_user, login_required
 from sqlalchemy import or_
 
 from webapp import db
@@ -11,10 +11,8 @@ bp = Blueprint('main', __name__, url_prefix=None)
 
 
 @bp.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
-    if current_user.is_anonymous:
-        return redirect(url_for('user.login'))
-
     username = current_user.name
     title = f"Welcome {username}!"
     available_categories = db.session.query(Category).filter(
