@@ -30,8 +30,8 @@ def transaction():
 
     # mock object
     is_actual = True
-    if bool(int(form.is_income.data)) == False:
-        value = 0 - int(form.value.data)
+    if not bool(int(form.is_income.data))
+        value = int(form.value.data) * (-1)
     else:
         value = form.value.data
     date = form.date.data
