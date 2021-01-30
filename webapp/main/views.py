@@ -51,19 +51,19 @@ def index():
     else:
         for field, errors in form.errors.items():
             for error in errors:
-                flash(f'Ошибка в поле {getattr(form, field).label.text}: {error}')
+                flash(f'Error in the filed {getattr(form, field).label.text}: {error}')
     return render_template('main/index.html', title=title, form=form,
                            user_transactions=user_transactions)
 
 
-@bp.route('/category_adding')
+@bp.route('/category-adding')
 def category_adding():
     title = "Add new category"
     form = CategoryForm()
     return render_template('main/category_adding.html', title=title, form=form)
 
 
-@bp.route('/category_adding-process', methods=['POST'])
+@bp.route('/category-adding-process', methods=['POST'])
 def category_adding_process():
     form = CategoryForm()
     if form.validate_on_submit():
@@ -72,10 +72,10 @@ def category_adding_process():
                                 is_income=bool(int(form.is_income.data)))
         db.session.add(new_category)
         db.session.commit()
-        flash('Категория успешно добавлена!')
+        flash('Category added successfully.')
         return redirect(url_for('main.index'))
     else:
         for field, errors in form.errors.items():
             for error in errors:
-                flash(f'Ошибка в поле {getattr(form, field).label.text}: {error}')
+                flash(f'Error in the field {getattr(form, field).label.text}: {error}')
         return redirect(url_for('main.category_adding'))

@@ -28,8 +28,8 @@
         {{ form.remember_me.label(class_='form-check-label') }}
       </div>
       {{ form.submit }}
-      <!-- к кнопкам добавить ссылки на соотв страницы-->
       <a class="btn btn-primary" href="{{ url_for('user.register') }}" role="button">Registration</a>
+<!--      update the link after implementing the password reset functionality -->
       <a class="btn btn-primary" href="#" role="button">Forgot Password</a>
     </form>
   </div>

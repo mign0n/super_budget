@@ -19,9 +19,9 @@ class LoginForm(FlaskForm):
                                         "placeholder": "Enter password",
                                         "type": "password"})
 
-    submit = SubmitField('Войти', render_kw={"class": "btn btn-primary"})
+    submit = SubmitField('Log-In', render_kw={"class": "btn btn-primary"})
 
-    remember_me = BooleanField('Запомнить меня!', default=True,
+    remember_me = BooleanField('Remember me', default=False,
                                render_kw={"class": "form-check-input"})
 
 
@@ -45,33 +45,33 @@ class RegistrationForm(FlaskForm):
                                          "placeholder": "Enter password",
                                          "type": "password"})
 
-    submit = SubmitField('Register!', render_kw={"class": "btn btn-primary"})
+    submit = SubmitField('Register', render_kw={"class": "btn btn-primary"})
 
     def validate_username(self, name):
         user_exist = db.session.query(exists().where(User.name == name.data)).scalar()
         if user_exist:
-            raise ValidationError('Пользователь с таким именем уже зарегистрирован')
+            raise ValidationError('A user with this name is already registered.')
 
     def validate_email(self, email):
         user_exist = db.session.query(exists().where(User.email == email.data)).scalar()
         if user_exist:
-            raise ValidationError('Пользователь с такой почтой уже зарегистрирован')
+            raise ValidationError('A user with this email is already registered.')
 
 
 class CategoryForm(FlaskForm):
-    new_category = StringField('Новая категория', validators=[DataRequired()],
+    new_category = StringField('New category', validators=[DataRequired()],
                                render_kw={"class": "form-control",
-                                          "placeholder": "Название категории"})
+                                          "placeholder": "Category name"})
 
-    is_income = SelectField('Тип категории', choices=[('1', 'Доход'), ('0', 'Расход')],
+    is_income = SelectField('Category type', choices=[('1', 'Income'), ('0', 'Expense')],
                             render_kw={"class": "form-select",
                                        "aria-label": "Default select example"})
 
-    submit = SubmitField('Добавить', render_kw={"class": "btn btn-primary"})
+    submit = SubmitField('Add', render_kw={"class": "btn btn-primary"})
 
     def validate_new_category(self, new_category):
         category_exist = db.session.query(exists().where(
             and_(Category.name == new_category.data, Category.user_id == current_user.id)
         )).scalar()
         if category_exist:
-            raise ValidationError('У вас уже есть такая категория!')
+            raise ValidationError('You already have this category.')
