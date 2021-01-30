@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user
 
 from webapp.user.forms import LoginForm, RegistrationForm
 from webapp.user.models import User
@@ -59,10 +59,10 @@ def process_reg():
         new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
-        flash('Вы успешно зарегистрировались!')
+        flash('You have successfully registered.')
         return redirect(url_for('user.login'))
     else:
         for field, errors in form.errors.items():
             for error in errors:
-                flash(f'Ошибка в поле {getattr(form, field).label.text}: {error}')
+                flash(f'Error in the field {getattr(form, field).label.text}: {error}')
         return redirect(url_for('user.register'))
