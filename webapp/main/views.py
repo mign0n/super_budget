@@ -32,7 +32,6 @@ def index():
         category = Category.query.filter_by(id=category_id, is_income=is_income).first()
         date = form.date.data
         comment = form.comment.data
-
         if not bool(int(form.is_income.data)):
             value = int(form.value.data) * (-1)
         else:
