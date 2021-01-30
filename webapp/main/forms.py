@@ -1,9 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import DateField, SelectField, StringField, SubmitField
-from wtforms.validators import DataRequired
-
-# mock object
-CATEGORIES = ['Продукты', 'Транспорт', 'Дом', 'Развлечения', 'Прочее', 'Услуги', 'Зарплата']
+from wtforms.validators import DataRequired, InputRequired
 
 
 class TransactionForm(FlaskForm):
@@ -31,7 +28,8 @@ class TransactionForm(FlaskForm):
                                        "aria-expanded": "false"
                                        }
                             )
-    category = SelectField(choices=CATEGORIES,
+    category = SelectField(coerce=int,
+                           validators=[InputRequired()],
                            render_kw={"class": "btn btn-primary dropdown-toggle",
                                       "data-toggle": "dropdown",
                                       "aria-haspopup": "true",
