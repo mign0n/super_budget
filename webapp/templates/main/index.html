@@ -42,13 +42,21 @@
    <div class="row">
      <div class="col-8">
       <div class='container'>
-        <table class="table table-bordered">
+        <table class="table table-bordered"
+                id="table"
+                data-toolbar="#toolbar"
+                data-search="true"
+                data-filter-control="true"
+                data-toggle="true"
+                data-show-columns="true"
+                data-show-columns-toggle-all="true"
+                data-pagination="true">
           <thead>
             <tr>
-              <th scope="col">Date</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Category</th>
-              <th scope="col">Comment</th>
+              <th scope="col" data-field="date" data-filter-control="select" data-sortable="true">Date</th>
+              <th scope="col" data-field="value" data-filter-control="input" data-sortable="true">Amount</th>
+              <th scope="col" data-field="category" data-filter-control="select" data-sortable="true">Category</th>
+              <th scope="col" data-field="comment" data-filter-control="input" data-sortable="true">Comment</th>
             </tr>
           </thead>
           <tbody>
