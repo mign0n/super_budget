@@ -1,13 +1,13 @@
-import dash_html_components as html
-from dash import Dash
 from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
-from webapp.db import db
+
 from webapp.admin.views import bp as admin_bp
+from webapp.diagram.dashboard import init_dashboard
+from webapp.db import db
+from webapp.main.models import Category, Transaction
 from webapp.main.views import bp as main_bp
 from webapp.user.models import User
-from webapp.main.models import Category, Transaction
 from webapp.user.views import bp as user_bp
 
 
@@ -29,10 +29,7 @@ def create_app():
     flask_app.register_blueprint(main_bp)
     flask_app.register_blueprint(user_bp)
 
-    dash_app = Dash(__name__, server=flask_app,
-                    routes_pathname_prefix='/board/')
-    dash_app.layout = html.Div(children='Dashboard is coming soon.')
-    application = dash_app.server
+    application = init_dashboard(flask_app)
 
     return application
 
