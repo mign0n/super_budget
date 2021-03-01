@@ -1,3 +1,10 @@
+.header-title {
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+}
+
 .wrapper {
     margin-right: auto;
     margin-left: auto;
@@ -9,5 +16,14 @@
 
 .card {
     margin-bottom: 24px;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
+}
+
+.menu {
+    height: 112px;
+    width: 912px;
+    display: flex;
+    justify-content: space-evenly;
+
     box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
 }
