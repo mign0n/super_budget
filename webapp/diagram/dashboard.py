@@ -3,7 +3,7 @@ import dash_html_components as html
 from dash import Dash
 from dash.dependencies import Input, Output
 from datetime import date, timedelta
-from flask_login import current_user
+from flask_login import current_user, login_required
 from webapp.main.models import Category, Transaction
 
 TODAY = date.today()
@@ -16,9 +16,11 @@ def init_dashboard(server):
         server=server,
         assets_folder='../static',
         assets_url_path='../static',
-        routes_pathname_prefix='/diagram/',
+        url_base_pathname='/diagram/',
         title='Understand your cash flow.'
     )
+
+    protect_dash_views(dash_app)
 
     dash_app.layout = html.Div(children=[
         html.H1(children='Dashboard is coming soon.', className='header-title'),
@@ -84,18 +86,22 @@ def init_callbacks(app):
             'layout': {
                 'title': {
                     'text': 'Cash flow'
-                }
+                },
+                'xaxis': {'fixedrange': True},
+                'yaxis': {'fixedrange': True},
             }
         }
         cash_balance_figure = {
             'data': [
                 # mock object
-                {'x': dates, 'y': [100000 - 1100, 93300, 91800, 88470], 'type': 'line', 'name': 'Balance'},
+                {'x': dates, 'y': [100000, 99400, 98900, 93300, 91800, 88470], 'type': 'line', 'name': 'Balance'},
             ],
             'layout': {
                 'title': {
                     'text': 'Balance'
-                }
+                },
+                'xaxis': {'fixedrange': True},
+                'yaxis': {'fixedrange': True},
             }
         }
         return cash_flow_figure, cash_balance_figure
@@ -119,3 +125,9 @@ def get_transactions_data(trans_type, start_date, end_date):
     transaction_values = [transaction.value for transaction in filtered_transactions]
 
     return transaction_dates, transaction_values
+
+
+def protect_dash_views(app):
+    for view_func in app.server.view_functions:
+        if view_func.startswith(app.config.url_base_pathname):
+            app.server.view_functions[view_func] = login_required(app.server.view_functions[view_func])
