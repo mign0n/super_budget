@@ -11,8 +11,21 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(255), nullable=False, unique=True)
     role = db.Column(db.String(5), nullable=False)
 
-    categories = db.relationship('Category', backref='category_owner', lazy='dynamic')
-    transactions = db.relationship('Transaction', backref='transaction_owner', lazy='dynamic')
+    categories = db.relationship(
+        'Category',
+        backref='category_owner',
+        lazy='dynamic'
+    )
+    transactions = db.relationship(
+        'Transaction',
+        backref='transaction_owner',
+        lazy='dynamic'
+    )
+    balance = db.relationship(
+        'Balance',
+        backref='balance_owner',
+        uselist=False
+    )
 
     def __repr__(self):
         return f"<User: name = {self.name}, id = {self.id}>"
@@ -26,3 +39,17 @@ class User(db.Model, UserMixin):
     @property
     def is_admin(self):
         return self.role == 'ADMIN'
+
+
+class Balance(db.Model):
+    __tablename__ = 'balance'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    value = db.Column(db.DECIMAL(15, 2))
+
+    def __repr__(self):
+        return (
+            f"<Balance: value = {self.value},"
+            f" user_id = {self.user_id},"
+            f" id = {self.id}"
+        )
