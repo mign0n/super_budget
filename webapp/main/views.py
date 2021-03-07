@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import or_
@@ -6,6 +8,7 @@ from webapp import db
 from webapp.main.models import Category, Transaction
 from webapp.main.forms import TransactionForm
 from webapp.user.forms import CategoryForm
+from webapp.user.models import Balance
 
 bp = Blueprint('main', __name__, url_prefix=None)
 
@@ -15,7 +18,9 @@ bp = Blueprint('main', __name__, url_prefix=None)
 def index():
     username = current_user.name
     title = f"Welcome {username}!"
-    user_transactions = Transaction.query.filter(Transaction.user_id == current_user.id).order_by(Transaction.date.desc()).limit(10)
+    user_transactions = Transaction.query.filter(
+        Transaction.user_id == current_user.id
+    ).order_by(Transaction.date.desc())
     available_categories = db.session.query(Category).filter(
         or_(Category.user_id == current_user.id, Category.user_id.is_(None))
     ).all()
@@ -29,21 +34,26 @@ def index():
         is_actual = True
         is_income = form.is_income.data
         category_id = form.category.data
-        category = Category.query.filter_by(id=category_id, is_income=is_income).first()
+        category = Category.query.filter_by(
+            id=category_id, is_income=is_income
+        ).first()
         date = form.date.data
         comment = form.comment.data
         if not bool(int(form.is_income.data)):
-            value = int(form.value.data) * (-1)
+            value = Decimal(form.value.data) * (-1)
         else:
-            value = form.value.data
+            value = Decimal(form.value.data)
 
-        new_transaction = Transaction(is_actual=is_actual,
-                                      value=value,
-                                      date=date,
-                                      comment=comment,
-                                      trans_cat=category,
-                                      transaction_owner=current_user)
+        balance_value = sum([transact.value for transact in user_transactions])
+        new_balance_value = balance_value + value
 
+        new_transaction = Transaction(
+            is_actual=is_actual, value=value, date=date, comment=comment,
+            trans_cat=category, transaction_owner=current_user
+        )
+        Balance.query.filter_by(user_id=current_user.id).update(
+            {'value': new_balance_value}
+        )
         db.session.add(new_transaction)
         db.session.commit()
         flash(f"Data has been written successfully.")
