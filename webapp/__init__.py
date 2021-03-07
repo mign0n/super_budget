@@ -15,7 +15,7 @@ def create_app():
     flask_app = Flask(__name__)
     flask_app.config.from_pyfile('config.py')
     db.init_app(flask_app)
-    migrate = Migrate(flask_app, db)
+    migrate = Migrate(flask_app, db, render_as_batch=True)
 
     login_manager = LoginManager()
     login_manager.init_app(flask_app)
